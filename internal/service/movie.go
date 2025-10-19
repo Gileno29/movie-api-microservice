@@ -8,6 +8,7 @@ import (
 
 type MovieService interface {
 	CreateMovie(ctx context.Context, movie *models.Movie) error
+	UpdateMovie(ctx context.Context, movie *models.Movie) (*models.Movie, error)
 }
 
 type movieService struct {
@@ -20,4 +21,9 @@ func NewMovieService(kafkaProducer kafka.MovieProducer) MovieService {
 
 func (s *movieService) CreateMovie(ctx context.Context, movie *models.Movie) error {
 	return s.kafkaProducer.Created(ctx, *movie)
+}
+
+func (s movieService) UpdateMovie(ctx context.Context, movie *models.Movie) (*models.Movie, error) {
+	return s.kafkaProducer.Updated(ctx, *movie)
+
 }

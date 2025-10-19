@@ -35,8 +35,8 @@ func (m *movieProducer) Deleted(ctx context.Context, id string) error {
 	return m.publish(ctx, "Movie.Deleted", models.Movie{ID: id})
 }
 
-func (m *movieProducer) Updated(ctx context.Context, movie models.Movie) error {
-	return m.publish(ctx, "Movie.Updated", movie)
+func (m *movieProducer) Updated(ctx context.Context, movie models.Movie) (*models.Movie, error) {
+	return &movie, m.publish(ctx, "Movie.Updated", movie)
 }
 
 func (m *movieProducer) publish(_ context.Context, msgType string, movie models.Movie) error {

@@ -35,3 +35,18 @@ func (h *MovieHandler) CreateMovie(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, movie)
 }
+
+func (h *MovieHandler) UpdateMovie(c *gin.Context) {
+	var movie models.Movie
+	if err := c.ShouldBindJSON(&movie); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error to bind in json": err.Error()})
+		return
+	}
+	updatedMovie, err := h.service.UpdateMovie(c.Request.Context(), &movie)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error to create a movie": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, updatedMovie)
+}

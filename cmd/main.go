@@ -24,6 +24,7 @@ func main() {
 	r := gin.Default()
 
 	r.POST("/movies", movieHandler.CreateMovie)
+	r.PUT("/movies/:id", movieHandler.UpdateMovie)
 
 	if err := r.Run(":8090"); err != nil {
 		log.Fatalf("Failed to run server: %s", err)

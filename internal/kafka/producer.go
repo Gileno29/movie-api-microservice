@@ -8,5 +8,5 @@ import (
 type MovieProducer interface {
 	Created(ctx context.Context, movie models.Movie) error
 	Deleted(ctx context.Context, id string) error
-	Updated(ctx context.Context, movie models.Movie) error
+	Updated(ctx context.Context, movie models.Movie) (*models.Movie, error)
 }

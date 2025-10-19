@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"movie-api/internal/handlers"
 	"movie-api/internal/kafka"
@@ -12,12 +13,12 @@ import (
 )
 
 func main() {
-	p, err := kafkaClient.NewProducer(&kafkaClient.ConfigMap{"bootstrap.servers": "localhost:9092"})
+	p, err := kafkaClient.NewProducer(&kafkaClient.ConfigMap{"bootstrap.servers": os.Getenv("SERVER")})
 	if err != nil {
 		log.Fatalf("Failed to create Kafka producer: %s", err)
 	}
 
-	movieProducer := kafka.NewMovieProducer(p, "movies")
+	movieProducer := kafka.NewMovieProducer(p, os.Getenv("TOPIC"))
 	movieService := service.NewMovieService(movieProducer)
 	movieHandler := handlers.NewMovieHandler(movieService)
 

@@ -30,8 +30,15 @@ class LocalConsumer(KafkaConsumer):
                                       movie_data['Value']['genre'],
                                       movie_data['Value']['year'])
                         print(f"Receivet movie: {movie_data}")
-                        
-                        repository.create_movie(movie)
+
+                        if movie_data['Type']=='Movie.Created':
+                            print("Trying to create a movie")
+                            repository.create_movie(movie)
+
+                        if movie_data['Type']=='Movie.Updated':
+                            print("Trying to update a movie")
+                            repository.update_movie(movie)
+
                     except Exception as e:
                         print(f"Erro ao processar mensagem: {e}")
                     

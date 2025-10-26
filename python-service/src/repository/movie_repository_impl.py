@@ -14,6 +14,20 @@ class MovieRepository(MovieInterface):
         
             try:
                 con.execute(q)
+                return movie
             except Exception as e:
                 print(e)
+
+    def update_movie(self, movie):
+        with self.conection as con:
+            q=f"""
+                UPDATE movies set name='{movie.name}', description='{movie.description}',genre='{movie.genre}', year='{movie.year}'
+                """
+            try:
+                con.execute(q)
+                return movie
+            except Exception as e:
+                    print(e)
+
+            return movie
     

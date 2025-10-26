@@ -3,13 +3,13 @@ import os
 #from confluent_kafka import Consumer, KafkaError
 from kafka import KafkaConsumer
 from src.models.movie import Movie
-
+from src.repository.movie_repository_impl import MovieRepository 
 import json
 
 class LocalConsumer(KafkaConsumer):
          
-    def consume(self):
-
+    def consume(self, c):
+        repository= MovieRepository(c)
         print(f"[*] Consumidor Kafka iniciado no tópico:{os.getenv("TOPIC")}")
 
         try:
@@ -31,6 +31,7 @@ class LocalConsumer(KafkaConsumer):
                                       movie_data['Value']['year'])
                         print(f"Receivet movie: {movie_data}")
                         
+                        repository.create_movie(movie)
                     except Exception as e:
                         print(f"Erro ao processar mensagem: {e}")
                     

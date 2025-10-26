@@ -4,7 +4,7 @@ from psycopg2 import Error
 # A classe é um Gerenciador de Contexto
 class Connection:
 
-    def __init__(self, dbname, user, password, host, port=5432):
+    def __init__(self, dbname, user, password, host, port=5433):
         self.dbname = dbname
         self.user = user
         self.password = password
@@ -55,8 +55,10 @@ class Connection:
         """Executa uma consulta SQL e retorna os resultados, se houver."""
         if not self.cursor:
             raise Exception("Cursor não está ativo. A conexão pode ter falhado.")
-
-        self.cursor.execute(query, params)
+        try:
+            self.cursor.execute(query, params)
+        except Exception as e:
+            print("error trying to execute query:", e)
         
         # Verifica se a consulta tem resultado para buscar (SELECT)
         if self.cursor.description:
@@ -65,3 +67,20 @@ class Connection:
             return self.cursor.fetchall()
         
         return None
+    def ping(self):
+        try:
+            self.conn = psycopg2.connect(
+                    dbname=self.dbname,
+                    user=self.user,
+                    password=self.password,
+                    host=self.host,
+                    port=self.port
+                )
+                # Cria um cursor (objeto para executar comandos SQL)
+            self.cursor = self.conn.cursor()
+            self.conn.close()
+            return True
+        except Exception as e:
+            print("erro ao tentar se conectar")
+            return False
+       

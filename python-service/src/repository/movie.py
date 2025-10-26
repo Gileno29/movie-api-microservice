@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from models.movie import Movie
+from src.models.movie import Movie
 class MovieInterface(ABC):
     @abstractmethod
     def create_movie(self, movie) -> Movie:

@@ -37,8 +37,8 @@ class LocalConsumer(KafkaConsumer):
                             print("Trying to create a movie")
                             replica_movie= repository.create_movie(movie)
                             
-                            print("Try to create a movie in replicante topic")
-                            producer.send(os.getenv('REPLICA_TOPIC'),str(replica_movie))
+                            print("Try to create a movie in replicante topic", replica_movie)
+                            producer.send(os.getenv('REPLICA_TOPIC'),replica_movie.to_dict())
 
 
                         if movie_data['Type']=='Movie.Updated':

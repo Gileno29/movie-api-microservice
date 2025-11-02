@@ -7,7 +7,7 @@ class MovieRepository(MovieInterface):
     def __init__(self, conection):
         self.conection=conection
        
-    def create_movie(self, movie) -> Movie:
+    def create_movie(self, movie):
         with self.conection as con:
             q=f"""INSERT INTO movies(id, name, description,genre, year) \
                 VALUES({movie.id},'{movie.name}', '{movie.description}', '{movie.genre}', '{movie.year}')"""

@@ -7,8 +7,10 @@ from src.repository.movie_repository_impl import MovieRepository
 import json
 
 class LocalConsumer(KafkaConsumer):
-         
-    def consume(self, c):
+    def __init__(self, *topics, **configs):
+        super().__init__(*topics, **configs)
+        
+    def consume(self, c, producer):
         repository= MovieRepository(c)
         print(f"[*] Consumidor Kafka iniciado no tópico:{os.getenv("TOPIC")}")
 
@@ -33,7 +35,11 @@ class LocalConsumer(KafkaConsumer):
 
                         if movie_data['Type']=='Movie.Created':
                             print("Trying to create a movie")
-                            repository.create_movie(movie)
+                            replica_movie= repository.create_movie(movie)
+                            
+                            print("Try to create a movie in replicante topic")
+                            producer.send(os.getenv('REPLICA_TOPIC'),str(replica_movie))
+
 
                         if movie_data['Type']=='Movie.Updated':
                             print("Trying to update a movie")
